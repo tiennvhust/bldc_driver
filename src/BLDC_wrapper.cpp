@@ -13,9 +13,9 @@
 
 #define _USE_MATH_DEFINES
 
-#define LEFT_MOTOR
+// #define LEFT_MOTOR
 #define RIGHT_MOTOR
-#define REAR_MOTOR
+// #define REAR_MOTOR
  
 #include <cmath>
 
@@ -27,7 +27,7 @@ int ms2rpm(double speed) {
 /*Convert rpm to m/s*/
 double rpm2ms(int rpm) {
     return (rpm / MOTOR_GEAR) / 60 * (2 * M_PI * RADIUS);
-}s
+}
 
 class BLDCWrapper 
 {
@@ -76,6 +76,7 @@ public:
             ros::Duration(1.0 / publish_motor_status_frequency_),
             &BLDCWrapper::publishMotorStatus, this);
 
+
         // stop_motor_server_ = nh->advertiseService(
         //     "stop_motor", &BLDCWrapper::callbackStop, this);
     }
@@ -106,7 +107,7 @@ public:
     void publishMotorStatus(const ros::TimerEvent &event)
     {
         std_msgs::JointState msg;
-        motorSpeedUpdate(&msg);
+        motorSpeedUpdate(msg);
         motor_status_publisher_.publish(msg);
     }
 
@@ -181,5 +182,5 @@ int main(int argc, char **argv)
     ROS_INFO("BLDC driver is now started");
 
     ros::waitForShutdown();
-    BLDC_warpper.stop();
+    // BLDC_warpper.stop();
 }

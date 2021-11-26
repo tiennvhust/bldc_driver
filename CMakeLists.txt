@@ -10,6 +10,7 @@ project(bldc_driver)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  sensor_msgs
   std_msgs
   std_srvs
 )
