@@ -3,6 +3,7 @@
 #include "pid.h"
 #include "SerialPort.hpp"
 #include <vector>
+
 using namespace mn::CppLinuxSerial;
 using namespace std;
 #define DEBUG
@@ -13,6 +14,9 @@ using namespace std;
 #define DEVICE_1 "/dev/ttyS0"
 #define DEVICE_2 "/dev/ttyS0"
 #define DEVICE_3 "/dev/ttyS0"
+
+#define MOTOR_GEAR       50
+#define RADIUS     0.0625
 
 class BLDC {
 	private:
@@ -36,6 +40,9 @@ class BLDC {
 		void PrintMainData();
 		#endif
 	public:
+
+		vector<uint8_t> MakePkg(uint8_t pid, int num, vector<uint8_t> data);
+	
 		void GetMainData(string &data); /*Get main data*/
 		void ChangeBaud(uint8_t baud); /*Change Baudrate. 9600, 19200, 38400, 57600, 115200*/
 		void MotorInit(); /*Init the motor. Fist function to call*/
@@ -46,6 +53,7 @@ class BLDC {
 		void ReqPosData(uint32_t &position); /*Read current position*/
 		void ReqMainData(); /*Read main data*/
 		void ReqTqData(uint16_t &tq);
+		uint16_t ReadRpm();
 		// void FuncPosCmd(uint32_t target_pos);
 		void FuncPosVelCmd(uint32_t target_pos, uint16_t speed); /*Position control with target speed.*/
 		void FuncIncPosVelCmd(uint32_t target_pos, uint16_t speed); /*Incremental position control with target speed*/
@@ -55,7 +63,7 @@ class BLDC {
 		void PrstRecall(int preset); /*Recall the saved preset and move to that position. in_data(1~10)*/
 		void TourStart(int preset); /*Move to the positions set by preset. in_data(1~10)*/
 		void CusPkg(uint8_t pid, int num, vector<uint8_t> data); /*Send a custom packet*/
-		vector<uint8_t> MakePkg(uint8_t pid, int num, vector<uint8_t> data);
+
 		BLDC(int id);
 		BLDC(const std::string& dev, int id, BaudRate baud); /*Constructor*/
 		~BLDC(); /*De-constructor*/

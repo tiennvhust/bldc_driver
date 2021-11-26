@@ -18,6 +18,7 @@ uint16_t Byte2Int(uint8_t byLow, uint8_t byHigh) {
 uint32_t Byte2LInt(uint8_t data1, uint8_t data2, uint8_t data3, uint8_t data4) {
 	return((uint32_t)data1 | (uint32_t)data2 << 8 | (uint32_t)data3 << 16 | (uint32_t)data4 << 24);
 }
+
 /*Wait for n ms*/
 void Waitms(int n) {
 	usleep(n*1000);
@@ -291,6 +292,11 @@ void BLDC::ReqTqData(uint16_t &tq) {
 	ReqData(PID_TQ_DATA, tq_data);
 	tq = Byte2Int(tq_data[5], tq_data[6]);
 	cout << dec << ">>>>>>>>>>>>>>>>>>> Tourque value: " << tq*100 << endl;
+}
+
+/*Return velocity data*/
+uint16_t BLDC::ReadRpm() {
+	return rpm;
 }
 
 /*Save current position to the preset address
