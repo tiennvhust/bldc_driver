@@ -41,6 +41,7 @@ private:
     ros::Publisher motor_status_publisher_;
     ros::ServiceServer init_motor_server_;
     ros::ServiceServer stop_motor_server_;
+    ros::Timer motor_status_timer_;
 
     double publish_motor_status_frequency_;
 public:
@@ -69,7 +70,7 @@ public:
         init_motor_server_ = nh->advertiseService(
             "init_motor", &BLDCWrapper::callbackInit, this);
 
-        motor_status_publisher_ = nh->advertise<std_msgs::JointState> (
+        motor_status_publisher_ = nh->advertise<sensor_msgs::JointState> (
             "/robot_kist/joint_states", 10);
 
         motor_status_timer_ = nh->createTimer(
@@ -106,7 +107,7 @@ public:
     /*Publish motor status*/
     void publishMotorStatus(const ros::TimerEvent &event)
     {
-        std_msgs::JointState msg;
+        sensor_msgs::JointState msg;
         motorSpeedUpdate(msg);
         motor_status_publisher_.publish(msg);
     }
@@ -120,7 +121,7 @@ public:
     }
 
     /*Update motor speed*/
-    void motorSpeedUpdate(std_msgs::JointState &data)
+    void motorSpeedUpdate(sensor_msgs::JointState &data)
     {
         /*Get main data from motors*/
 #ifdef LEFT_MOTOR
