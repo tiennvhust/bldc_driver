@@ -11,9 +11,9 @@ using namespace std;
 #define POS_MAX 0x10EA
 #define DEFAULT_BAUDRATE BaudRate::B_115200
 #define DEFAULT_WAIT_MS 10 // with baudrate 115200
-#define DEVICE_1 "/dev/ttyS0"
-#define DEVICE_2 "/dev/ttyS0"
-#define DEVICE_3 "/dev/ttyS0"
+#define DEVICE_1 "/dev/ttyUSB0"
+#define DEVICE_2 "/dev/ttyUSB0"
+#define DEVICE_3 "/dev/ttyUSB0"
 
 #define MOTOR_GEAR       50
 #define RADIUS     0.0625

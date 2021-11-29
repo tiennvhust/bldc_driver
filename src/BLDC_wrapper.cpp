@@ -20,12 +20,12 @@
 #include <cmath>
 
 /*Convert m/s to rpm*/
-int ms2rpm(double speed) {
+int ms2rpm(float speed) {
     return speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
 }
 
 /*Convert rpm to m/s*/
-double rpm2ms(int rpm) {
+float rpm2ms(int rpm) {
     return (rpm / MOTOR_GEAR) / 60 * (2 * M_PI * RADIUS);
 }
 
@@ -124,17 +124,20 @@ public:
     void motorSpeedUpdate(sensor_msgs::JointState &data)
     {
         /*Get main data from motors*/
+        data.name = "MotorState";
+        data.velocity = new std_msgs::Float64[3];
+
 #ifdef LEFT_MOTOR
         left->ReqMainData();
-        data.velocity[0] = rpm2ms(left->ReadRpm());
+        data.velocity[0].data = rpm2ms(left->ReadRpm());
 #endif
 #ifdef RIGHT_MOTOR
         right->ReqMainData();
-        data.velocity[1] = rpm2ms(right->ReadRpm());
+        data.velocity[1].data = rpm2ms(right->ReadRpm());
 #endif
 #ifdef REAR_MOTOR
         rear->ReqMainData();
-        data.velocity[2] = rpm2ms(rear->ReadRpm());
+        data.velocity[2].data = rpm2ms(rear->ReadRpm());
 #endif
     }
 
