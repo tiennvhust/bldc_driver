@@ -20,13 +20,13 @@
 #include <cmath>
 
 /*Convert m/s to rpm*/
-int ms2rpm(float speed) {
+int16_t ms2rpm(double speed) {
     return speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
 }
 
 /*Convert rpm to m/s*/
-float rpm2ms(int rpm) {
-    return (rpm / MOTOR_GEAR) / 60 * (2 * M_PI * RADIUS);
+double rpm2ms(int16_t rpm) {
+    return (double)(rpm / MOTOR_GEAR) / 60 * (2 * M_PI * RADIUS);
 }
 
 class BLDCWrapper 
@@ -75,11 +75,11 @@ public:
 
         motor_status_timer_ = nh->createTimer(
             ros::Duration(1.0 / publish_motor_status_frequency_),
-            &BLDCWrapper::publishMotorStatus, this);
+           &BLDCWrapper::publishMotorStatus, this);
 
 
-        // stop_motor_server_ = nh->advertiseService(
-        //     "stop_motor", &BLDCWrapper::callbackStop, this);
+        stop_motor_server_ = nh->advertiseService(
+            "stop_motor", &BLDCWrapper::callbackStop, this);
     }
 
 #ifdef LEFT_MOTOR
@@ -108,7 +108,9 @@ public:
     void publishMotorStatus(const ros::TimerEvent &event)
     {
         sensor_msgs::JointState msg;
+        // msg.velocity = new float[3];
         motorSpeedUpdate(msg);
+        // tra ve [van toc];
         motor_status_publisher_.publish(msg);
     }
 
@@ -124,20 +126,22 @@ public:
     void motorSpeedUpdate(sensor_msgs::JointState &data)
     {
         /*Get main data from motors*/
-        data.name = "MotorState";
-        data.velocity = new std_msgs::Float64[3];
-
+        data.name.push_back("Motor Speed");
+        // data.velocity = new float[3];
 #ifdef LEFT_MOTOR
-        left->ReqMainData();
-        data.velocity[0].data = rpm2ms(left->ReadRpm());
+        int16_t left_rpm;
+        left->ReqRpmData(left_rpm);
+        data.velocity.push_back(rpm2ms(left_rpm));
 #endif
 #ifdef RIGHT_MOTOR
-        right->ReqMainData();
-        data.velocity[1].data = rpm2ms(right->ReadRpm());
+        int16_t right_rpm;
+        right->ReqRpmData(right_rpm);
+        data.velocity.push_back(rpm2ms(right_rpm));
 #endif
 #ifdef REAR_MOTOR
-        rear->ReqMainData();
-        data.velocity[2].data = rpm2ms(rear->ReadRpm());
+        int16_t rear_rpm;
+        rear->ReqRpmData(rear_rpm);
+        data.velocity.push_back(rpm2ms(rear_rpm));
 #endif
     }
 
@@ -158,19 +162,19 @@ public:
 #endif
     }
 
-    // bool callbackStop(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
-    // {
-    //     stop();
-    //     res.success = true;
-    //     res.message = "Successfully stopped motor.";
-    //     return true;
-    // }
+    bool callbackStop(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+    {
+        stop();
+        res.success = true;
+        res.message = "Successfully stopped motor.";
+        return true;
+    }
 
-    // /*Stop*/
-    // void stop()
-    // {
-    //     left->MotorStop();
-    // }
+    /*Stop*/
+    void stop()
+    {
+        left->MotorStop();
+    }
     
 };
 int main(int argc, char **argv)
@@ -186,5 +190,5 @@ int main(int argc, char **argv)
     ROS_INFO("BLDC driver is now started");
 
     ros::waitForShutdown();
-    // BLDC_warpper.stop();
+    BLDC_warpper.stop();
 }

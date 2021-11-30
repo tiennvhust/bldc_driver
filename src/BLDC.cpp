@@ -294,10 +294,17 @@ void BLDC::ReqTqData(uint16_t &tq) {
 	cout << dec << ">>>>>>>>>>>>>>>>>>> Tourque value: " << tq*100 << endl;
 }
 
-/*Return velocity data*/
-uint16_t BLDC::ReadRpm() {
-	return rpm;
+// /*Return velocity data*/
+// uint16_t BLDC::ReadRpm() {
+// 	return rpm;
+// }
+
+void BLDC::ReqRpmData(int16_t &rpm) {
+	string rpm_data;
+	ReqData(PID_INT_RPM_DATA, rpm_data);
+	rpm = Byte2Int(rpm_data[5], rpm_data[6]);
 }
+
 
 /*Save current position to the preset address
   INPUT: 0~9

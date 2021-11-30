@@ -22,10 +22,10 @@ class BLDC {
 	private:
 		SerialPort port;
 		int id; /*Machine ID*/
-		uint16_t rpm; /*Speed (rpm)*/
+		int16_t rpm; /*Speed (rpm)*/
 		uint16_t current; /*Current (0~1023, 0.1A Unit)*/
 		uint8_t ctrl; /*Control type*/
-		uint16_t ref; /*Reference speed (rpm)*/
+		int16_t ref; /*Reference speed (rpm)*/
 		uint16_t out; /*Control output*/
 		uint8_t stat; /*Status of controller*/
 		uint32_t pos; /*Motor position*/
@@ -53,7 +53,8 @@ class BLDC {
 		void ReqPosData(uint32_t &position); /*Read current position*/
 		void ReqMainData(); /*Read main data*/
 		void ReqTqData(uint16_t &tq);
-		uint16_t ReadRpm();
+		void ReqRpmData(int16_t &rpm); /*Read current velocity*/
+		// uint16_t ReadRpm();
 		// void FuncPosCmd(uint32_t target_pos);
 		void FuncPosVelCmd(uint32_t target_pos, uint16_t speed); /*Position control with target speed.*/
 		void FuncIncPosVelCmd(uint32_t target_pos, uint16_t speed); /*Incremental position control with target speed*/
