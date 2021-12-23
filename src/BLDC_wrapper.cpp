@@ -13,14 +13,14 @@
 
 #define _USE_MATH_DEFINES
 
-// #define LEFT_MOTOR
+#define LEFT_MOTOR
 #define RIGHT_MOTOR
-// #define REAR_MOTOR
+#define REAR_MOTOR
  
 #include <cmath>
 
 /*Convert m/s to rpm*/
-int16_t ms2rpm(double speed) {
+int ms2rpm(double speed) {
     return speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
 }
 
@@ -58,7 +58,7 @@ public:
             "/robot_kist/right_joint_velocity_controller/command", 10, &BLDCWrapper::callbackSpeedCommandRight, this);
 #endif
 #ifdef REAR_MOTOR
-        rear.reset(new BLDC(3));
+        rear.reset(new BLDC(4));
         rear_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
             "/robot_kist/back_joint_velocity_controller/command", 10, &BLDCWrapper::callbackSpeedCommandRear, this);
 #endif  

@@ -442,6 +442,9 @@ BLDC::BLDC(int id) {
 		case 3:
 			port.SetDevice(DEVICE_3);
 			break;
+		case 4:
+			port.SetDevice(DEVICE_4);
+			break;
 		default:
 			port.SetDevice(DEVICE_1);
 	}

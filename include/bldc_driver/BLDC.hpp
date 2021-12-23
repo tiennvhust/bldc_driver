@@ -12,8 +12,9 @@ using namespace std;
 #define DEFAULT_BAUDRATE BaudRate::B_115200
 #define DEFAULT_WAIT_MS 10 // with baudrate 115200
 #define DEVICE_1 "/dev/ttyUSB0"
-#define DEVICE_2 "/dev/ttyUSB0"
-#define DEVICE_3 "/dev/ttyUSB0"
+#define DEVICE_2 "/dev/ttyUSB1"
+#define DEVICE_3 "/dev/ttyUSB2"
+#define DEVICE_4 "/dev/ttyUSB3"
 
 #define MOTOR_GEAR       50
 #define RADIUS     0.0625
