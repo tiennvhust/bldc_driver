@@ -108,9 +108,7 @@ public:
     void publishMotorStatus(const ros::TimerEvent &event)
     {
         sensor_msgs::JointState msg;
-        // msg.velocity = new float[3];
         motorSpeedUpdate(msg);
-        // tra ve [van toc];
         motor_status_publisher_.publish(msg);
     }
 
@@ -127,7 +125,6 @@ public:
     {
         /*Get main data from motors*/
         data.name.push_back("Motor Speed");
-        // data.velocity = new float[3];
 #ifdef LEFT_MOTOR
         int16_t left_rpm;
         left->ReqRpmData(left_rpm);
