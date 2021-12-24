@@ -24,6 +24,8 @@ void Waitms(int n) {
 	usleep(n*1000);
 }
 
+#ifdef DEBUG
+
 void BLDC::PrintMainData() {
 	cout << dec << "Speed (rpm): " << int(rpm) << "\n" \
 		 << "Current (mA): " << int(current)*100 << "\n" \
@@ -35,6 +37,8 @@ void BLDC::PrintMainData() {
 		 << "Break duty: " << brk << "\n" \
 		 << "Temperature: " << temp << endl;
 }
+
+#endif
 
 int CheckSum(string& data)
 {

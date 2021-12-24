@@ -21,7 +21,10 @@
 
 /*Convert m/s to rpm*/
 int ms2rpm(double speed) {
-    return speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
+    int rpm = speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
+    if (rpm < 0) return 0;
+    if (rpm > RPM_MAX) return RPM_MAX;
+    return rpm;
 }
 
 /*Convert rpm to m/s*/
@@ -44,6 +47,7 @@ private:
     ros::Timer motor_status_timer_;
 
     double publish_motor_status_frequency_;
+    void speedCommand(double msg);
 public:
     BLDCWrapper(ros::NodeHandle *nh)
     {
@@ -86,6 +90,7 @@ public:
     /*Set speed for left motor*/
     void callbackSpeedCommandLeft(const std_msgs::Float64::ConstPtr &msg)
     {
+
         left->VelCmd(ms2rpm(msg->data));
     }
 #endif
