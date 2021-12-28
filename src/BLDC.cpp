@@ -81,6 +81,14 @@ vector<uint8_t> BLDC::MakePkg(uint8_t pid, int num, vector<uint8_t> data) {
 void BLDC::SendPkg(vector<uint8_t> pkg) {
 	string str(pkg.begin(), pkg.end());
 	port.Write(str);
+	#ifdef DEBUG
+		cout << "Sent packet: ";
+		for(int i = 0; i < pkg.size(); i++)
+		{
+			cout << hex << int(pkg[i]) << " ";
+		}
+		cout << endl;
+	#endif
 }
 
 /*Receive packet*/
@@ -146,14 +154,6 @@ void BLDC::ChangeBaud(uint8_t baud) {
 	data.push_back(0xaa);
 	data.push_back(baud);
 	vector<uint8_t> pkg = MakePkg(PID_BAUD_RATE, 2, data);
-	#ifdef DEBUG
-		cout << "Sent packet: ";
-		for(int i = 0; i < pkg.size(); i++)
-		{
-			cout << hex << int(pkg[i]) << " ";
-		}
-		cout << endl;
-	#endif
 	SendPkg(pkg);
 	string rev_data;
 	RevPkg(rev_data);
@@ -165,14 +165,6 @@ int BLDC::ReqData(uint8_t pid, string &rev_data) {
 	vector<uint8_t> data;
 	data.push_back(pid);
 	vector<uint8_t> pkg = MakePkg(PID_REQ_PID_DATA, 1, data);
-	#ifdef DEBUG
-		cout << "Sent packet: ";
-		for(int i = 0; i < pkg.size(); i++)
-		{
-			cout << hex << int(pkg[i]) << " ";
-		}
-		cout << endl;
-	#endif
 	SendPkg(pkg);
 	if(RevPkg(rev_data)) return -1;
 	return 0;
@@ -218,9 +210,9 @@ void BLDC::TqCmd(int tq) {
 }
 
 /*Set positive moving direction. Default: CW*/
-void BLDC::SetSignCmd(uint8_t sign) {
+void BLDC::SetSignCmd(bool sign) {
 	vector<uint8_t> data;
-	data.push_back(sign);
+	data.push_back(sign ? 1 : 0);
 	vector<uint8_t> pkg = MakePkg(PID_TQ_CMD, 2, data);
 	SendPkg(pkg);
 }

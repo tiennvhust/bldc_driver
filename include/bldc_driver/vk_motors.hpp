@@ -10,6 +10,7 @@
 #include <std_msgs/Int32.h>
 #include <std_msgs/Float64.h>
 #include <std_srvs/Trigger.h>
+#include <std_srvs/SetBool.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_msgs/KeyValue.h>
 #include <sensor_msgs/JointState.h>
@@ -60,7 +61,6 @@ private:
     ros::Timer motor_status_timer_;
 
     double publish_motor_status_frequency_;
-    bool motor_dir_;
 public:
     BLDCWrapper(ros::NodeHandle *nh)
     {
@@ -83,15 +83,13 @@ public:
         #endif
 
         init_motor_server_ = nh->advertiseService(
-            "/bldc_driver/init_motor", &BLDCWrapper::callbackInit, this);
+            "/vk_motors/init_motor", &BLDCWrapper::callbackInit, this);
 
         stop_motor_server_ = nh->advertiseService(
-            "/bldc_driver/stop_motor", &BLDCWrapper::callbackStop, this);
-
-        if (!ros::param::get("~motor_dir_", motor_dir_)) {motor_dir_ = 1;}
+            "/vk_motors/stop_motor", &BLDCWrapper::callbackStop, this);
 
         set_dir_server_ = nh->advertiseService(
-            "/bldc_driver/set_moving_direction", &BLDCWrapper::callbackSetDir, this);
+            "/vk_motors/set_moving_direction", &BLDCWrapper::callbackSetDir, this);
 
         if (!ros::param::get("~publish_motor_status_frequency", publish_motor_status_frequency_)) {publish_motor_status_frequency_ = 1.0;}
 
@@ -107,7 +105,6 @@ public:
     /*Set speed for left motor*/
     void callbackSpeedCommandLeft(const std_msgs::Float64::ConstPtr &msg)
     {
-
         left->VelCmd(ms2rpm(msg->data));
     }
     #endif
@@ -140,7 +137,7 @@ public:
     {
         motorInit();
         res.success = true;
-        res.message = "Successfully start motors.";
+        res.message = "Successfully start motor(s).";
         return true;
     }
 
@@ -189,7 +186,7 @@ public:
     {
         stop();
         res.success = true;
-        res.message = "Successfully stopped motor.";
+        res.message = "Successfully stopped motor(s).";
         return true;
     }
 
@@ -209,22 +206,23 @@ public:
         #endif
     }
 
-    bool callbackSetDir(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+    bool callbackSetDir(std_srvs::SetBool::Request &req, std_srvs::SetBool::Response &res)
     {
         #ifdef LEFT_MOTOR
-        left->SetSignCmd(motor_dir_);
+        left->SetSignCmd(req.data);
         #endif
 
         #ifdef RIGHT_MOTOR
-        right->SetSignCmd(motor_dir_);
+        right->SetSignCmd(req.data);
         #endif
 
         #ifdef REAR_MOTOR
-        rear->SetSignCmd(motor_dir_);
+        rear->SetSignCmd(req.data);
         #endif
 
+        res.message = req.data ? "Successfully changed moving direction to CCW." : "Successfully changed moving direction to CW.";
+
         res.success = true;
-        res.message = "Successfully changed moving direction.";
         return true;
     }
 };

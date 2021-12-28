@@ -6,7 +6,7 @@
 
 using namespace mn::CppLinuxSerial;
 using namespace std;
-// #define DEBUG
+#define DEBUG
 #define RPM_MAX 5000
 #define POS_MAX 0x10EA
 #define DEFAULT_BAUDRATE BaudRate::B_115200
@@ -51,7 +51,7 @@ class BLDC {
 		void ChangeBaud(uint8_t baud); /*Change Baudrate. 9600, 19200, 38400, 57600, 115200*/
 		void VelCmd(int rpm); /*Set velocity*/
 		void TqCmd(int tq); /*Set torque*/
-		void SetSignCmd(uint8_t sign); /*Set positive moving direction (CW-0, CCW-1). Default: CW*/
+		void SetSignCmd(bool sign); /*Set positive moving direction (CW-0, CCW-1). Default: CW*/
 		void MotorStop(); /*Stop motor*/
 		void MotorBrake(); /*Brake*/
 
