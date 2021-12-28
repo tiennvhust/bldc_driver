@@ -217,6 +217,14 @@ void BLDC::TqCmd(int tq) {
 	SendPkg(pkg);
 }
 
+/*Set positive moving direction. Default: CW*/
+void BLDC::SetSignCmd(uint8_t sign) {
+	vector<uint8_t> data;
+	data.push_back(sign);
+	vector<uint8_t> pkg = MakePkg(PID_TQ_CMD, 2, data);
+	SendPkg(pkg);
+}
+
 
 /*Function commands*/
 /*Position*/
@@ -287,7 +295,9 @@ void BLDC::ReqPosData(uint32_t &position) {
 	string pos_data;
 	ReqData(PID_POSI_DATA, pos_data);
 	position = Byte2LInt(pos_data[5], pos_data[6], pos_data[7], pos_data[8]);
-	cout << dec << ">>>>>>>>>Current position: " << position << endl;
+#ifdef DEBUG
+	cout << dec << "Current position: " << position << endl;
+#endif
 }
 
 /*Read tourque data*/
@@ -295,7 +305,9 @@ void BLDC::ReqTqData(uint16_t &tq) {
 	string tq_data;
 	ReqData(PID_TQ_DATA, tq_data);
 	tq = Byte2Int(tq_data[5], tq_data[6]);
-	cout << dec << ">>>>>>>>>>>>>>>>>>> Tourque value: " << tq*100 << endl;
+#ifdef DEBUG
+	cout << dec << "Tourque value: " << tq*100 << endl;
+#endif
 }
 
 // /*Return velocity data*/

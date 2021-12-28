@@ -33,29 +33,35 @@ class BLDC {
 		uint8_t brk; /*Break duty (0~255)*/
 		uint8_t temp; /*Temperature (0~100)*/
 		vector<uint32_t> prst_list; /*List of preset positions*/
+
 		void SendPkg(vector<uint8_t> pkg);
 		int RevPkg(string &rev_data);
+
 		void PidCmd(uint8_t cmd); /*Send commands*/
-		int ReqData(uint8_t pid, string &rev_data); /*Request main data*/
+		int ReqData(uint8_t pid, string &rev_data); /*Request PID*/
+		
 		#ifdef DEBUG
-		void PrintMainData();
+			void PrintMainData(); /*Print out main data. For debug*/
 		#endif
 	public:
 
 		vector<uint8_t> MakePkg(uint8_t pid, int num, vector<uint8_t> data);
 	
-		void GetMainData(string &data); /*Get main data*/
-		void ChangeBaud(uint8_t baud); /*Change Baudrate. 9600, 19200, 38400, 57600, 115200*/
 		void MotorInit(); /*Init the motor. Fist function to call*/
-		void VelCmd(int rpm);
+		void ChangeBaud(uint8_t baud); /*Change Baudrate. 9600, 19200, 38400, 57600, 115200*/
+		void VelCmd(int rpm); /*Set velocity*/
 		void TqCmd(int tq); /*Set torque*/
-		void MotorStop();
-		void MotorBrake();
+		void SetSignCmd(uint8_t sign); /*Set positive moving direction (CW-0, CCW-1). Default: CW*/
+		void MotorStop(); /*Stop motor*/
+		void MotorBrake(); /*Brake*/
+
+		void GetMainData(string &data); /*Read main data*/
 		void ReqPosData(uint32_t &position); /*Read current position*/
 		void ReqMainData(); /*Read main data*/
-		void ReqTqData(uint16_t &tq);
+		void ReqTqData(uint16_t &tq); /*Read torque*/
 		void ReqRpmData(int16_t &rpm); /*Read current velocity*/
 		// uint16_t ReadRpm();
+
 		// void FuncPosCmd(uint32_t target_pos);
 		void FuncPosVelCmd(uint32_t target_pos, uint16_t speed); /*Position control with target speed.*/
 		void FuncIncPosVelCmd(uint32_t target_pos, uint16_t speed); /*Incremental position control with target speed*/
@@ -64,6 +70,7 @@ class BLDC {
 		void TourData(int speed, int delay); /*Set parameters for TOUR*/
 		void PrstRecall(int preset); /*Recall the saved preset and move to that position. in_data(1~10)*/
 		void TourStart(int preset); /*Move to the positions set by preset. in_data(1~10)*/
+		
 		void CusPkg(uint8_t pid, int num, vector<uint8_t> data); /*Send a custom packet*/
 
 		BLDC(int id);
