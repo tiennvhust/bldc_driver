@@ -130,7 +130,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-add_executable(bldc_driver src/BLDC_wrapper.cpp src/BLDC.cpp src/SerialPort.cpp)
+add_executable(bldc_driver src/vk_motors.cpp src/BLDC.cpp src/SerialPort.cpp)
 target_link_libraries(bldc_driver ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library

@@ -1,3 +1,6 @@
+#ifndef VK_MOTORS_H
+#define VK_MOTORS_H
+
 #include <ros/ros.h>
 #include "bldc_driver/BLDC.hpp"
 #include <memory>
@@ -226,18 +229,4 @@ public:
     }
 };
 
-int main(int argc, char **argv)
-{
-    ros::init(argc, argv, "BLDC_driver");
-    ros::NodeHandle nh;
-
-    ros::AsyncSpinner spinner(4);
-    spinner.start();
-
-    BLDCWrapper BLDC_warpper(&nh);
-    BLDC_warpper.motorInit();
-    ROS_INFO("BLDC driver is now started");
-
-    ros::waitForShutdown();
-    BLDC_warpper.stop();
-}
+#endif
