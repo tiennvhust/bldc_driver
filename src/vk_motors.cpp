@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 
     BLDCWrapper BLDC_warpper(&nh);
     BLDC_warpper.motorInit();
-    ROS_INFO("Robot motor(s) is now started");
+    ROS_INFO("Robot motor(s) is now started.");
 
     ros::waitForShutdown();
     BLDC_warpper.stop();

@@ -213,7 +213,7 @@ void BLDC::TqCmd(int tq) {
 void BLDC::SetSignCmd(bool sign) {
 	vector<uint8_t> data;
 	data.push_back(sign ? 1 : 0);
-	vector<uint8_t> pkg = MakePkg(PID_TQ_CMD, 2, data);
+	vector<uint8_t> pkg = MakePkg(PID_INV_SIGN_CMD, 1, data);
 	SendPkg(pkg);
 }
 

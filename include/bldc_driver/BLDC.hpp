@@ -6,7 +6,9 @@
 
 using namespace mn::CppLinuxSerial;
 using namespace std;
+
 #define DEBUG
+
 #define RPM_MAX 5000
 #define POS_MAX 0x10EA
 #define DEFAULT_BAUDRATE BaudRate::B_115200

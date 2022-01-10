@@ -29,9 +29,8 @@
 #include <cmath>
 
 /*Convert m/s to rpm*/
-int ms2rpm(double speed) {
-    int rpm = speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
-    if (rpm < 0) return 0;
+int16_t ms2rpm(double speed) {
+    int16_t rpm = speed / (2 * M_PI * RADIUS) * MOTOR_GEAR * 60;
     if (rpm > RPM_MAX) return RPM_MAX;
     return rpm;
 }
@@ -137,7 +136,7 @@ public:
     {
         motorInit();
         res.success = true;
-        res.message = "Successfully start motor(s).";
+        res.message = "Successfully started motor(s).";
         return true;
     }
 
