@@ -25,6 +25,7 @@
 #define LEFT_MOTOR 2
 #define RIGHT_MOTOR 1
 #define REAR_MOTOR 4
+#define DEFAULT_FREQUENCY 50
 
 #include <cmath>
 
@@ -90,7 +91,7 @@ public:
         set_dir_server_ = nh->advertiseService(
             "/vk_motors/set_moving_direction", &BLDCWrapper::callbackSetDir, this);
 
-        if (!ros::param::get("~publish_motor_status_frequency", publish_motor_status_frequency_)) {publish_motor_status_frequency_ = 1.0;}
+        if (!ros::param::get("~publish_motor_status_frequency", publish_motor_status_frequency_)) {publish_motor_status_frequency_ = DEFAULT_FREQUENCY;}
 
         motor_status_publisher_ = nh->advertise<sensor_msgs::JointState> (
             "/robot_kist/joint_states", 10);
