@@ -41,7 +41,7 @@ double rpm2ms(int16_t rpm) {
     return (double)(rpm / MOTOR_GEAR) / 60 * (2 * M_PI * RADIUS);
 }
 
-class BLDCWrapper 
+class BLDCWrapper  
 {
 private:
     std::unique_ptr<BLDC> left;
@@ -66,18 +66,24 @@ public:
     {
         #ifdef LEFT_MOTOR
         left.reset(new BLDC(LEFT_MOTOR));
+        // left_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
+        //     "/robot_kist/joint_3_velocity/command", 10, &BLDCWrapper::callbackSpeedCommandLeft, this);
         left_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
             "/robot_kist/left_joint_velocity_controller/command", 10, &BLDCWrapper::callbackSpeedCommandLeft, this);
         #endif
 
         #ifdef RIGHT_MOTOR
         right.reset(new BLDC(RIGHT_MOTOR));
+        // right_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
+        //     "/robot_kist/joint_2_velocity/command", 10, &BLDCWrapper::callbackSpeedCommandRight, this);
         right_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
             "/robot_kist/right_joint_velocity_controller/command", 10, &BLDCWrapper::callbackSpeedCommandRight, this);
         #endif
 
         #ifdef REAR_MOTOR
         rear.reset(new BLDC(REAR_MOTOR));
+        // rear_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
+        //     "/robot_kist/joint_1_velocity/command", 10, &BLDCWrapper::callbackSpeedCommandRear, this);
         rear_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
             "/robot_kist/back_joint_velocity_controller/command", 10, &BLDCWrapper::callbackSpeedCommandRear, this);
         #endif
@@ -91,7 +97,7 @@ public:
         set_dir_server_ = nh->advertiseService(
             "/vk_motors/set_moving_direction", &BLDCWrapper::callbackSetDir, this);
 
-        if (!ros::param::get("~publish_motor_status_frequency", publish_motor_status_frequency_)) {publish_motor_status_frequency_ = DEFAULT_FREQUENCY;}
+        if (!ros::param::get("~publish_motor_status_frequency", publish_motor_status_frequency_)) {publish_motor_status_frequency_ = 1.0;}
 
         motor_status_publisher_ = nh->advertise<sensor_msgs::JointState> (
             "/robot_kist/joint_states", 10);

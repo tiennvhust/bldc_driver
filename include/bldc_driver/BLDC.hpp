@@ -1,7 +1,7 @@
 #ifndef BLDC_H
 #define BLDC_H
 #include "pid.h"
-#include "SerialPort.hpp"
+#include "CppLinuxSerial/SerialPort.hpp"
 #include <vector>
 
 using namespace mn::CppLinuxSerial;
@@ -13,10 +13,10 @@ using namespace std;
 #define POS_MAX 0x10EA
 #define DEFAULT_BAUDRATE BaudRate::B_115200
 #define DEFAULT_WAIT_MS 10 // with baudrate 115200
-#define DEVICE_1 "/dev/ttyUSB0"
-#define DEVICE_2 "/dev/ttyUSB1"
+#define DEVICE_1 "/dev/rs485_01"
+#define DEVICE_2 "/dev/rs485_02"
 #define DEVICE_3 "/dev/ttyUSB2"
-#define DEVICE_4 "/dev/ttyUSB3"
+#define DEVICE_4 "/dev/rs485_04"
 
 #define MOTOR_GEAR       50
 #define RADIUS     0.0625

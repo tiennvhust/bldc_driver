@@ -1,4 +1,4 @@
-#include "bldc_driver/SerialPort.hpp"
+#include "CppLinuxSerial/SerialPort.hpp"
 #include <algorithm>
 #include <vector>
 #include <string>
@@ -9,7 +9,7 @@
 #include <unistd.h>
 using namespace mn::CppLinuxSerial;
 using namespace std;
-// #define DEBUG
+#define DEBUG
 
 uint16_t Byte2Int(uint8_t byLow, uint8_t byHigh) {
 	return (byLow | (uint16_t)byHigh<<8);
@@ -309,7 +309,7 @@ void BLDC::ReqTqData(uint16_t &tq) {
 
 void BLDC::ReqRpmData(int16_t &rpm) {
 	string rpm_data;
-	ReqData(PID_INT_RPM_DATA, rpm_data);
+	if(ReqData(PID_INT_RPM_DATA, rpm_data)) cout << "ERROR: Request data failed." << endl;
 	rpm = Byte2Int(rpm_data[5], rpm_data[6]);
 }
 

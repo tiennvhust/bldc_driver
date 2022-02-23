@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   std_srvs
+  CppLinuxSerial
 )
 
 ## System dependencies are found with CMake's conventions
@@ -130,7 +131,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-add_executable(bldc_driver src/vk_motors.cpp src/BLDC.cpp src/SerialPort.cpp)
+add_executable(bldc_driver src/vk_motors.cpp src/BLDC.cpp)
 target_link_libraries(bldc_driver ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library

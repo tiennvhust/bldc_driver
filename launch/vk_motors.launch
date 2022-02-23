@@ -1,5 +1,5 @@
 <launch>
-	<arg name="motor_status_frequency" default="50"/>
+	<arg name="motor_status_frequency" default="1.0"/>
 	<node name="vk_motors" pkg="bldc_driver" type="bldc_driver" respawn="false" output="screen"/>
 	  <param name="~publish_motor_status_frequency" value="$(arg motor_status_frequency" />
 </launch>
