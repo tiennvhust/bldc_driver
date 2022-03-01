@@ -7,7 +7,7 @@
 using namespace mn::CppLinuxSerial;
 using namespace std;
 
-#define DEBUG
+// #define DEBUG
 
 #define RPM_MAX 5000
 #define POS_MAX 0x10EA

@@ -3,17 +3,21 @@
 
 #include <ros/ros.h>
 #include "bldc_driver/BLDC.hpp"
+
 #include <memory>
 #include <map>
 #include <string>
 #include <vector>
+
 #include <std_msgs/Int32.h>
 #include <std_msgs/Float64.h>
 #include <std_srvs/Trigger.h>
 #include <std_srvs/SetBool.h>
+#include <sensor_msgs/JointState.h>
+#include <std_msgs/UInt8.h>
+
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_msgs/KeyValue.h>
-#include <sensor_msgs/JointState.h>
 
 #define _USE_MATH_DEFINES
 
@@ -26,6 +30,7 @@
 #define RIGHT_MOTOR 1
 #define REAR_MOTOR 4
 #define DEFAULT_FREQUENCY 50
+#define NOM_CODE 12
 
 #include <cmath>
 
@@ -51,6 +56,7 @@ private:
     ros::Subscriber left_speed_command_subscriber_;
     ros::Subscriber right_speed_command_subscriber_;
     ros::Subscriber rear_speed_command_subscriber_;
+    ros::Subscriber robot_status_subscriber_;
     
     ros::Publisher motor_status_publisher_;
     
@@ -87,6 +93,9 @@ public:
         rear_speed_command_subscriber_ = nh->subscribe<std_msgs::Float64> (
             "/robot_kist/back_joint_velocity_controller/command", 10, &BLDCWrapper::callbackSpeedCommandRear, this);
         #endif
+
+        robot_status_subscriber_ = nh->subscribe<std_msgs::UInt8> (
+            "robot_status", 1, &BLDCWrapper::callbackRobotStatus, this);
 
         init_motor_server_ = nh->advertiseService(
             "/vk_motors/init_motor", &BLDCWrapper::callbackInit, this);
@@ -137,6 +146,11 @@ public:
         sensor_msgs::JointState msg;
         motorSpeedUpdate(msg);
         motor_status_publisher_.publish(msg);
+    }
+
+    void callbackRobotStatus(const std_msgs::UInt8::ConstPtr &msg)
+    {
+        if (msg->data == NOM_CODE) motorInit();
     }
 
     bool callbackInit(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)

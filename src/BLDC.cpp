@@ -9,7 +9,6 @@
 #include <unistd.h>
 using namespace mn::CppLinuxSerial;
 using namespace std;
-#define DEBUG
 
 uint16_t Byte2Int(uint8_t byLow, uint8_t byHigh) {
 	return (byLow | (uint16_t)byHigh<<8);
