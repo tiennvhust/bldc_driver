@@ -108,7 +108,7 @@ public:
             "/vk_motors/set_moving_direction", &BLDCWrapper::callbackSetDir, this);
 
         motor_status_publisher_ = nh->advertise<std_msgs::Float64MultiArray> (
-            "/vk_motors/wheels_speed", 10);
+            "/wheels_speed", 10);
 
         if (!ros::param::get("~publish_motor_status_frequency", publish_frequency_))
             publish_frequency_ = DEFAULT_FREQUENCY;
@@ -146,6 +146,7 @@ public:
     void publishMotorSpeed(const ros::TimerEvent &event)
     {
         std_msgs::Float64MultiArray msg;
+        msg.data.resize(3);
         getMotorSpeed(msg);
         motor_status_publisher_.publish(msg);
     }
