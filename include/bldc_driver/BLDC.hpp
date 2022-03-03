@@ -24,7 +24,9 @@ using namespace std;
 class BLDC {
 	private:
 		SerialPort port;
+
 		int id; /*Machine ID*/
+
 		int16_t rpm; /*Speed (rpm)*/
 		uint16_t current; /*Current (0~1023, 0.1A Unit)*/
 		uint8_t ctrl; /*Control type*/
@@ -34,12 +36,15 @@ class BLDC {
 		uint32_t pos; /*Motor position*/
 		uint8_t brk; /*Break duty (0~255)*/
 		uint8_t temp; /*Temperature (0~100)*/
+
 		vector<uint32_t> prst_list; /*List of preset positions*/
 
 		void SendPkg(vector<uint8_t> pkg);
+
 		int RevPkg(string &rev_data);
 
 		void PidCmd(uint8_t cmd); /*Send commands*/
+
 		int ReqData(uint8_t pid, string &rev_data); /*Request PID*/
 		
 		#ifdef DEBUG
