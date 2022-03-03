@@ -27,6 +27,8 @@ class BLDC {
 
 		int id; /*Machine ID*/
 
+		bool readyFlag; /*Flag for ready state*/
+
 		int16_t rpm; /*Speed (rpm)*/
 		uint16_t current; /*Current (0~1023, 0.1A Unit)*/
 		uint8_t ctrl; /*Control type*/

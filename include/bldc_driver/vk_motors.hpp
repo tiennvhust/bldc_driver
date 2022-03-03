@@ -102,13 +102,13 @@ public:
         #endif
 
         robot_status_subscriber_ = nh->subscribe<std_msgs::UInt8> (
-            "robot_status", 1, &BLDCWrapper::callbackRobotStatus, this);
+            "robot_status", 10, &BLDCWrapper::callbackRobotStatus, this);
 
         set_dir_server_ = nh->advertiseService(
             "/vk_motors/set_moving_direction", &BLDCWrapper::callbackSetDir, this);
 
         motor_status_publisher_ = nh->advertise<std_msgs::Float64MultiArray> (
-            "/wheels_speed", 10);
+            "wheels_speed", 10);
 
         if (!ros::param::get("~publish_motor_status_frequency", publish_frequency_))
             publish_frequency_ = DEFAULT_FREQUENCY;
@@ -151,6 +151,7 @@ public:
         motor_status_publisher_.publish(msg);
     }
 
+    /*Robot status update*/
     void callbackRobotStatus(const std_msgs::UInt8::ConstPtr &msg)
     {
         switch (msg->data)
@@ -206,6 +207,8 @@ public:
         #endif
 
         readyStatus = true;
+
+        ROS_INFO("Motor(s) is initialized.\n");
     }
 
     bool callbackSetDir(std_srvs::SetBool::Request &req, std_srvs::SetBool::Response &res)
@@ -228,7 +231,7 @@ public:
         
             res.success = true;
         }
-        else res.message = "Changing moving direction Unsuccessful! Robot is not in READY state.";
+        else res.message = "Changing moving direction FAILED! Robot is NOT in READY state.";
 
         return true;
     }
