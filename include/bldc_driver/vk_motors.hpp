@@ -123,6 +123,7 @@ public:
     void callbackSpeedCommandLeft(const std_msgs::Float64::ConstPtr &msg)
     {
         if (readyStatus) left->VelCmd(ms2rpm(msg->data));
+        else ROS_INFO("Motor(s) is NOT Initialized\n");
     }
     #endif
 
@@ -131,6 +132,7 @@ public:
     void callbackSpeedCommandRight(const std_msgs::Float64::ConstPtr &msg)
     {
         if (readyStatus) right->VelCmd(ms2rpm(msg->data));
+        else ROS_INFO("Motor(s) is NOT Initialized\n");
     }
     #endif
 
@@ -139,6 +141,7 @@ public:
     void callbackSpeedCommandRear(const std_msgs::Float64::ConstPtr &msg)
     {
         if (readyStatus) rear->VelCmd(ms2rpm(msg->data));
+        else ROS_INFO("Motor(s) is NOT Initialized\n");
     }
     #endif
 
@@ -146,7 +149,6 @@ public:
     void publishMotorSpeed(const ros::TimerEvent &event)
     {
         std_msgs::Float64MultiArray msg;
-        msg.data.resize(3);
         getMotorSpeed(msg);
         motor_status_publisher_.publish(msg);
     }
@@ -154,13 +156,8 @@ public:
     /*Robot status update*/
     void callbackRobotStatus(const std_msgs::UInt8::ConstPtr &msg)
     {
-        switch (msg->data)
-        {
-            case NOM_CODE:
-                motorInit();
-            default:
-                readyStatus = false;
-        }
+        if (msg->data == NOM_CODE) motorInit();
+        else readyStatus = false;
     }
 
     /*Update motors speed*/

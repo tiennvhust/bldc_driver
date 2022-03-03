@@ -423,7 +423,7 @@ BLDC::BLDC(const std::string& dev, int id, BaudRate baud) {
 	prst_list.reserve(10);
 	port.SetDevice(dev);
 	port.SetBaudRate(baud);
-	port.SetTimeout(-1); // Block when reading until any data is received
+	port.SetTimeout(100); // Block when reading until any data is received
 	port.Open();
 }
 
@@ -456,7 +456,7 @@ BLDC::BLDC(int id) {
 			port.SetDevice(DEVICE_1);
 	}
 	port.SetBaudRate(DEFAULT_BAUDRATE);
-	port.SetTimeout(-1); // Block when reading until any data is received
+	port.SetTimeout(100); // Block when reading until any data is received
 	port.Open();
 }
 
